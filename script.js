@@ -34,11 +34,19 @@ async function fetchData() {
     button_submit.classList.add("green");
     button_div.classList.add("green-div");
     button_div.appendChild(button_submit);
+    button_submit.addEventListener('click', handleSubmit)
+    function handleSubmit(event) {
+        const review = document.querySelector('#review-quiz');
+        const disable = document.querySelectorAll('input');
+        const correctAns = myJson.correctAnswers;
+        disable.forEach(e => {
+            e.disabled = true;
+        });
+        
 
-
+    }
     let qName = 0;
     let count = 1;
-
     myJson.questions.forEach(e => {
         const titles = document.createElement('p');
         const questions = document.createElement('p');
@@ -60,7 +68,6 @@ async function fetchData() {
             radio.id = `Q${qName}`;
             radio.name = `${e._id}`;
             radio.value = `${i}`;
-            // radio.classList.add(`${e._id}`);
 
             label.htmlFor = `Q${qName}`;
             label.textContent = e.answers[i];
@@ -76,6 +83,8 @@ async function fetchData() {
     quizBody.appendChild(button_div);
 
 }
+
+
 
 
 
