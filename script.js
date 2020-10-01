@@ -2,6 +2,7 @@
 
 const button_start = document.querySelector('.blue');
 button_start.addEventListener('click', handleStartButton);
+const userAnswer = {};
 
 function handleStartButton(event) {
     let body = document.body;
@@ -14,6 +15,11 @@ function handleStartButton(event) {
     // button_submit.classList.add("green");
     fetchData();
     // body.appendChild(button_submit);
+}
+
+function handleOnClick(e) {
+    userAnswer[e.target.name] = e.target.value;
+    console.log('-----', userAnswer)
 }
 
 async function fetchData() {
@@ -42,7 +48,13 @@ async function fetchData() {
         disable.forEach(e => {
             e.disabled = true;
         });
-        
+        for (const key in userAnswer) {
+            if (userAnswer[key] && correctAns[key] && userAnswer[key] == correctAns[key]) {
+               const totalInputDom = document.querySelectorAll(`input[name='${key}']`);
+               const correctInputDOM = totalInputDom[correctAns[key]];
+               correctInputDOM.nextElementSibling.style.backgroundColor = 'green'
+            }
+        }
 
     }
     let qName = 0;
@@ -59,6 +71,7 @@ async function fetchData() {
         quizBody.appendChild(titles);
         quizBody.appendChild(questions);
         for (let i = 0; i < e.answers.length; i++) {
+            userAnswer[e._id] = null;
             const label = document.createElement('label');
             const radio = document.createElement('input');
             const div = document.createElement('div');
@@ -68,6 +81,7 @@ async function fetchData() {
             radio.id = `Q${qName}`;
             radio.name = `${e._id}`;
             radio.value = `${i}`;
+            radio.addEventListener('click', handleOnClick)
 
             label.htmlFor = `Q${qName}`;
             label.textContent = e.answers[i];
