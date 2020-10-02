@@ -93,6 +93,7 @@ header {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin: 18px 0 36px 0;
 }
 .box p {
   margin-top: 18px;
@@ -141,8 +142,9 @@ button {
 }
 
 label {
-  width:100%;
+  width: 100%;
   display: flex;
+  align-items: center;
   background-color: #f1f1f1;
   padding: 20px 0px 20px 60px;
   border-bottom: 1px solid white;
@@ -172,6 +174,19 @@ input {
 
 .background {
   display: flex;
-  align-items:center;
+  align-items: center;
   position: relative;
+}
+
+.correct,
+.wrong {
+  position: absolute;
+  color: white;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 5px 5px 5px 5px;
+}
+
+.score{
+  font-size: 24px;
 }
