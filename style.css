@@ -18,6 +18,9 @@ body {
 
 p {
   line-height: 25px;
+}
+
+.with-margin {
   margin-bottom: 18px;
 }
 
@@ -83,6 +86,11 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#author p {
+  font-size: 14px;
+  margin-bottom: 0;
 }
 
 .title {

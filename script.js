@@ -43,9 +43,11 @@ async function fetchData() {
         const titles = document.createElement('p');
         const questions = document.createElement('p');
         titles.classList.add("title");
+        titles.classList.add("with-margin");
         titles.textContent = `Question ${count} of ${myJson.questions.length}`;
 
         questions.classList.add("questions");
+        questions.classList.add("with-margin");
         questions.textContent = `${e.text}`;
 
         quizBody.appendChild(titles);
@@ -150,14 +152,18 @@ async function fetchData() {
         //setup result box
         result_view.classList.add("box");
         titles.classList.add('result_title');
+        titles.classList.add('with-margin');
         titles.textContent = "Result:"
         result_score.classList.add('score');
+        result_score.classList.add('with-margin');
         result_score.textContent = `${scores}/10`;
         result_percent.classList.add('questions');
+        result_percent.classList.add('with-margin');
         result_percent.textContent = `${scores * 10}%`;
         button_again.textContent = "Try Again";
         button_again.addEventListener('click', handleTryAgain);
         button_again.classList.add('blue');
+        result_comment.classList.add('with-margin');
         result_comment.textContent = result;
 
 
@@ -176,6 +182,9 @@ async function fetchData() {
                 review_quiz.innerHTML = "";
                 intro.style.display = "block";
                 userAnswers = {};
+                //scroll back to the begin of page
+                const beginPage = document.querySelector("#course-name");
+                beginPage.scrollIntoView();
             }
         }
     }
