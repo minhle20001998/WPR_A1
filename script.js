@@ -160,13 +160,6 @@ async function fetchData() {
         button_again.classList.add('blue');
         result_comment.textContent = result;
 
-        //handle try again button
-        function handleTryAgain(e) {
-            quizBody.innerHTML = "";
-            review_quiz.innerHTML = "";
-            intro.style.display = "block";
-            userAnswers = {};
-        }
 
         //append result box
         result_view.appendChild(titles);
@@ -175,6 +168,16 @@ async function fetchData() {
         result_view.appendChild(result_comment);
         result_view.appendChild(button_again);
         review_quiz.appendChild(result_view);
+
+        //handle try again button
+        function handleTryAgain(e) {
+            if (window.confirm("Are you sure want to finish this quiz")) {
+                quizBody.innerHTML = "";
+                review_quiz.innerHTML = "";
+                intro.style.display = "block";
+                userAnswers = {};
+            }
+        }
     }
 }
 
