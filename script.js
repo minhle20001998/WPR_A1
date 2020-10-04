@@ -42,6 +42,10 @@ async function fetchData() {
     myJson.questions.forEach(e => {
         const titles = document.createElement('p');
         const questions = document.createElement('p');
+        const answer_box = document.createElement('div');
+
+        answer_box.classList.add("answer_box");
+
         titles.classList.add("title");
         titles.classList.add("with-margin");
         titles.textContent = `Question ${count} of ${myJson.questions.length}`;
@@ -76,10 +80,11 @@ async function fetchData() {
 
             div.appendChild(input);
             div.appendChild(label);
-            quizBody.appendChild(div);
+            answer_box.appendChild(div);
             qName++;
         }
         count += 1;
+        quizBody.appendChild(answer_box)
     });
     //append submit button
     quizBody.appendChild(button_div);
