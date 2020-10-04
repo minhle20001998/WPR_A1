@@ -1,20 +1,23 @@
 // TODO(you): Write the JavaScript necessary to complete the assignment.
+//call API
+fetchData();
 //create an object to store user answers
 let userAnswers = {};
 const intro = document.querySelector('#introduction');
 const author = document.querySelector('#author');
 const button_start = document.querySelector('.blue');
+const quizBody = document.querySelector(".quiz-body");
 button_start.addEventListener('click', handleStartButton);
 
 function handleStartButton(event) {
     let body = document.body;
     intro.style.display = 'none';
     author.style.display = 'none';
-    //if start button pressed, call API
-    fetchData();
+    //display the quiz
+    quizBody.style.display = 'block';
 }
 
-//calling API
+//-------------begin of quiz section-------------//
 async function fetchData() {
     const url = "https://wpr-quiz-api.herokuapp.com/attempts";
     const myResponse = await fetch(url, {
@@ -24,10 +27,10 @@ async function fetchData() {
         },
     });
     const myJson = await myResponse.json();
-    const quizBody = document.querySelector(".quiz-body");
     const attempQuiz = document.querySelector("#attempt-quiz")
     const button_submit = document.createElement('button');
     const button_div = document.createElement('div');
+
 
 
     button_submit.textContent = "Submit your answers >"
@@ -46,21 +49,20 @@ async function fetchData() {
 
         answer_box.classList.add("answer_box");
 
-        titles.classList.add("title");
-        titles.classList.add("with-margin");
+        titles.classList.add("title", "with-margin");
         titles.textContent = `Question ${count} of ${myJson.questions.length}`;
 
-        questions.classList.add("questions");
-        questions.classList.add("with-margin");
+        questions.classList.add("questions", "with-margin");
         questions.textContent = `${e.text}`;
 
         quizBody.appendChild(titles);
         quizBody.appendChild(questions);
+        //loop for each answer in question 
         for (let i = 0; i < e.answers.length; i++) {
             userAnswers[e._id] = null;
             const label = document.createElement('label');
             const input = document.createElement('input');
-            const div = document.createElement('div');
+            const div_answers = document.createElement('div');
 
             input.type = "radio";
             input.id = `Q${qName}`;
@@ -76,11 +78,13 @@ async function fetchData() {
 
             label.htmlFor = `Q${qName}`;
             label.textContent = e.answers[i];
-            div.classList.add('background');
 
-            div.appendChild(input);
-            div.appendChild(label);
-            answer_box.appendChild(div);
+            div_answers.classList.add('background');
+
+            div_answers.appendChild(input);
+            div_answers.appendChild(label);
+
+            answer_box.appendChild(div_answers);
             qName++;
         }
         count += 1;
@@ -88,9 +92,15 @@ async function fetchData() {
     });
     //append submit button
     quizBody.appendChild(button_div);
+    //hide quiz
+    quizBody.style.display = "none";
 
+    //-------------end of quiz section-------------//
+
+    //-------------begin of result section-------------//
     //handle submit button
     button_submit.addEventListener('click', handleSubmit)
+
     function handleSubmit(event) {
         button_div.style.display = 'none';
         const review_quiz = document.querySelector('#review-quiz');
@@ -108,12 +118,14 @@ async function fetchData() {
         disable.forEach(e => {
             e.disabled = true;
         });
+        //loop for each user answers
         for (const key in userAnswers) {
             const totalInputDom = document.querySelectorAll(`input[name='${key}']`);
             const userInputDom = totalInputDom[userAnswers[key]];
             const correctInputDOM = totalInputDom[correctAns[key]];
             const statusCorrect = document.createElement('div');
             const statusWrong = document.createElement('div');
+
             statusCorrect.textContent = "Correct Answer";
             statusCorrect.classList.add('correct');
             statusWrong.textContent = "Wrong Answer";
@@ -143,33 +155,32 @@ async function fetchData() {
         //write score comment
         if (scores < 5) {
             result = 'Practice more to improve it :D';
-        }
-        else if (scores >= 5 && scores <= 8) {
+        } else if (scores >= 5 && scores <= 8) {
             result = "You are doing great , keep working :D";
-        }
-        else if (scores > 8 && scores < 10) {
-            result = "Great job !"
-        }
-        else {
-            result = "Perfect @@ !!!"
+        } else if (scores > 8 && scores < 10) {
+            result = "Good job !"
+        } else {
+            result = "P-P-Perfect @@ !!!"
         }
 
         //setup result box
         result_view.classList.add("box");
-        titles.classList.add('result_title');
-        titles.classList.add('with-margin');
+
+        titles.classList.add('result_title', 'with-margin');
         titles.textContent = "Result:"
-        result_score.classList.add('score');
-        result_score.classList.add('with-margin');
+
+        result_score.classList.add('score', 'with-margin');
         result_score.textContent = `${scores}/10`;
-        result_percent.classList.add('questions');
-        result_percent.classList.add('with-margin');
+
+        result_percent.classList.add('questions', 'with-margin');
         result_percent.textContent = `${scores * 10}%`;
+
+        result_comment.classList.add('with-margin');
+        result_comment.textContent = result;
+
         button_again.textContent = "Try Again";
         button_again.addEventListener('click', handleTryAgain);
         button_again.classList.add('blue');
-        result_comment.classList.add('with-margin');
-        result_comment.textContent = result;
 
 
         //append result box
@@ -177,8 +188,8 @@ async function fetchData() {
         result_view.appendChild(result_score);
         result_view.appendChild(result_percent);
         result_view.appendChild(result_comment);
-        result_view.appendChild(button_again);
         review_quiz.appendChild(result_view);
+        result_view.appendChild(button_again);
 
         //handle try again button
         function handleTryAgain(e) {
@@ -186,6 +197,7 @@ async function fetchData() {
                 quizBody.innerHTML = "";
                 review_quiz.innerHTML = "";
                 intro.style.display = "block";
+                fetchData();
                 userAnswers = {};
                 //scroll back to the begin of page
                 const beginPage = document.querySelector("#course-name");
@@ -193,10 +205,5 @@ async function fetchData() {
             }
         }
     }
+    //-------------end of result section-------------//
 }
-
-
-
-
-
-
